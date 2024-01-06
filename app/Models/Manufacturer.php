@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Manufacturer extends Model
@@ -17,5 +16,9 @@ class Manufacturer extends Model
     public function brands()
     {
         return $this->hasMany(Brand::class);
+    }
+    public function manufacturerVehicles()
+    {
+        return $this->hasMany(ManufacturerVehicle::class);
     }
 }

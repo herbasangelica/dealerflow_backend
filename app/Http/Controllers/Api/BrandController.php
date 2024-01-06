@@ -4,15 +4,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Brand;
 
 class BrandController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function getBrand()
     {
-        //
+        $brands = Brand::with('manufacturer')->get();
+        return response()->json($brands);
     }
 
     /**
@@ -26,9 +28,17 @@ class BrandController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function createBrand(Request $request)
     {
-        //
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'brandName' => 'required',
+            'image' => 'required',
+            'manufacturer_id' => 'required|exists:manufacturers,id'
+        ]);
+
+        $brand = Brand::create($validatedData);
+        return response()->json($brand, 201);
     }
 
     /**

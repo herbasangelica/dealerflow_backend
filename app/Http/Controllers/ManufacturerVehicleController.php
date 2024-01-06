@@ -3,17 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\ManufacturerVehicle;
 use Illuminate\Http\Request;
-use App\Models\Manufacturer;
 
-class ManufacturerController extends Controller
+class ManufacturerVehicleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function getManufacturer()
+    public function getManufacturerVehicle()
     {
-        return Manufacturer::all();
+        $manufacturerVehicles = ManufacturerVehicle::with('manufacturer', 'carModel.brand', 'dealer')->get();
+        return response()->json($manufacturerVehicles);
     }
 
     /**
@@ -27,18 +28,20 @@ class ManufacturerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function createManufacturer(Request $request)
+    public function createManufacturerVehicle(Request $request)
     {
-        //
-        $manufacturer = Manufacturer::create([
-            'manufacturerName'      => $request->manufacturerName,
-            'manufacturerEmail'  => $request->manufacturerEmail,
-            'manufacturerAddr'  => $request->manufacturerAddr,
-            'description'  => $request->description,
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'manufacturer_id' => 'required|exists:manufacturers,id',
+            'car_model_id' => 'required|exists:car_models,id',
+            'dealer_id' => 'required|exists:dealers,id',
+            'vin' => 'required',
+            'price' => 'required|'
         ]);
-        return $manufacturer;
-    }
 
+        $manufacturerVehicle = ManufacturerVehicle::create($validatedData);
+        return response()->json($manufacturerVehicle, 201);
+    }
     /**
      * Display the specified resource.
      */

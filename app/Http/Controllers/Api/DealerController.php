@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Dealer;
 use Illuminate\Http\Request;
-use App\Models\Manufacturer;
 
-class ManufacturerController extends Controller
+class DealerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function getManufacturer()
+    public function getDealer()
     {
-        return Manufacturer::all();
+        return Dealer::all();
     }
 
     /**
@@ -27,14 +27,15 @@ class ManufacturerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function createManufacturer(Request $request)
+    public function createDealer(Request $request)
     {
         //
-        $manufacturer = Manufacturer::create([
-            'manufacturerName'      => $request->manufacturerName,
-            'manufacturerEmail'  => $request->manufacturerEmail,
-            'manufacturerAddr'  => $request->manufacturerAddr,
-            'description'  => $request->description,
+        $manufacturer = Dealer::create([
+            'image'      => $request->image,
+            'dealerName'      => $request->dealerName,
+            'dealerAddr'  => $request->dealerAddr,
+            'dealerPhone'  => $request->dealerPhone,
+            'dealerEmail'  => $request->dealerEmail,
         ]);
         return $manufacturer;
     }

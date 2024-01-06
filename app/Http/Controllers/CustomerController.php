@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use Illuminate\Http\Request;
-use App\Models\Manufacturer;
 
-class ManufacturerController extends Controller
+class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function getManufacturer()
+    public function getCustomer()
     {
-        return Manufacturer::all();
+        return Customer::all();
     }
 
     /**
@@ -27,16 +27,19 @@ class ManufacturerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function createManufacturer(Request $request)
+    public function createCustomer(Request $request)
     {
-        //
-        $manufacturer = Manufacturer::create([
-            'manufacturerName'      => $request->manufacturerName,
-            'manufacturerEmail'  => $request->manufacturerEmail,
-            'manufacturerAddr'  => $request->manufacturerAddr,
-            'description'  => $request->description,
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'customerName' => 'required',
+            'customerAddr' => 'required',
+            'customerPhone' => 'required',
+            'customerGender' => 'required',
+            'customerAnnualIncome' => 'required',
         ]);
-        return $manufacturer;
+
+        $brand = Customer::create($validatedData);
+        return response()->json($brand, 201);
     }
 
     /**
