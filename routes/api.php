@@ -7,10 +7,10 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ManufacturerController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CarModelController;
-use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DealerController;
-use App\Http\Controllers\Api\DealerVehicleController;
 use App\Http\Controllers\Api\ManufacturerVehicleController;
+use App\Http\Controllers\Api\DealerVehicleController;
+use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\SaleController;
 
 /*
