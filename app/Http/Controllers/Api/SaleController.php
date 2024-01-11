@@ -50,6 +50,37 @@ class SaleController extends Controller
         }
     }
 
+
+    public function searchSaleByVin(Request $request)
+    {
+        $queryParam = $request->input('query');
+
+        try {
+            $query = Sale::with(
+                'dealerVehicle',
+                'dealerVehicle.manufacturerVehicle',
+                'customer',
+            );
+
+            if ($queryParam) {
+                $query->whereHas('dealerVehicle.manufacturerVehicle', function ($q) use ($queryParam) {
+                    $q->where('vin', 'LIKE', '%' . $queryParam . '%');
+                });
+            }
+
+            // Execute the query and get the results
+            $results = $query->get();
+
+            return response()->json([
+                $results[0] // Return the fetched data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+
+
     /**
      * Show the form for creating a new resource.
      */

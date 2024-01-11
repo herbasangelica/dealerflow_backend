@@ -20,6 +20,7 @@ class DealerVehicleController extends Controller
             'manufacturerVehicle.carModel.brand',
             'manufacturerVehicle.dealer',
         )->get();
+
         return response()->json($dealerVehicle);
     }
 
@@ -101,6 +102,36 @@ class DealerVehicleController extends Controller
         }
     }
 
+
+    public function getDealerVehicleVINSearch(Request $request)
+    {
+        $queryParam = $request->input('query');
+
+        try {
+            $query = DealerVehicle::with(
+                'manufacturerVehicle',
+                'manufacturerVehicle.manufacturer',
+                'manufacturerVehicle.carModel',
+                'manufacturerVehicle.carModel.brand',
+                'manufacturerVehicle.dealer'
+            );
+
+            if ($queryParam) {
+                $query->whereHas('manufacturerVehicle', function ($q) use ($queryParam) {
+                    $q->where('vin', 'LIKE', '%' . $queryParam . '%');
+                });
+            }
+
+            // Execute the query and get the results
+            $results = $query->get();
+
+            return response()->json([
+                $results[0] // Return the fetched data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
 
 
     /**
