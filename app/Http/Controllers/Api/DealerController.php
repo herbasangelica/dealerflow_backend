@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Dealer;
+use App\Models\DealerVehicle;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class DealerController extends Controller
@@ -39,6 +41,28 @@ class DealerController extends Controller
         ]);
         return $manufacturer;
     }
+
+    // public function getDealersWithLongestAvgInventoryTime()
+    // {
+    //     try {
+    //         $dealersWithAvgTime = DealerVehicle::select(
+    //             'dealers.id',
+    //             'dealers.dealerName',
+    //             DB::raw('AVG(DATEDIFF(NOW(), dealer_vehicles.created_at)) as avgInventoryTime')
+    //         )
+    //             ->join('manufacturer_vehicles', 'dealer_vehicles.manufacturer_vehicle_id', '=', 'manufacturer_vehicles.id')
+    //             ->join('dealers', 'manufacturer_vehicles.dealer_id', '=', 'dealers.id')
+    //             ->groupBy('dealers.id', 'dealers.dealerName')
+    //             ->orderByDesc('avgInventoryTime')
+    //             ->limit(5) // Adjust the limit as needed
+    //             ->get();
+
+    //         return response()->json($dealersWithAvgTime);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['message' => $e->getMessage()], 500);
+    //     }
+    // }
+
 
     /**
      * Display the specified resource.

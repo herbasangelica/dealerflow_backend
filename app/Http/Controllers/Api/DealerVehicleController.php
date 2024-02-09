@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\DealerVehicle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class DealerVehicleController extends Controller
 {
@@ -82,7 +83,7 @@ class DealerVehicleController extends Controller
 
             if ($modelId) {
                 $query->whereHas('manufacturerVehicle.carModel', function ($q) use ($modelId) {
-                    $q->where('id', $modelId); // Filter by brand ID
+                    $q->where('id', $modelId)->where('status', '=', 'ON SALE');
                 });
             }
 
@@ -127,6 +128,55 @@ class DealerVehicleController extends Controller
 
             return response()->json([
                 $results[0] // Return the fetched data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+
+    //search max to min price
+    public function getDealerVehiclePriceSearch(Request $request)
+    {
+        $limit = $request->input('limit', 10);
+        $page = $request->input('page', 1);
+        $minPrice = $request->input('minPrice');
+        $maxPrice = $request->input('maxPrice');
+
+        try {
+            $query = DealerVehicle::with(
+                'manufacturerVehicle',
+                'manufacturerVehicle.manufacturer',
+                'manufacturerVehicle.carModel',
+                'manufacturerVehicle.carModel.brand',
+                'manufacturerVehicle.dealer'
+            );
+
+            if ($minPrice !== null && $maxPrice !== null) {
+                // Cast to integers before using whereBetween
+                $query->whereBetween('price', [(int)$minPrice, (int)$maxPrice]);
+            } elseif ($minPrice !== null) {
+                $query->where('price', '>=', (int)$minPrice);
+            } elseif ($maxPrice !== null) {
+                $query->where('price', '<=', (int)$maxPrice);
+            }
+
+            // Additional conditions, if any
+            $query->where('status', '=', 'On sale');
+
+            // Order the results by price in descending order
+            $query->orderBy('price', 'asc');
+
+            $paginator = $query->paginate($limit);
+
+            $models = $paginator->items();
+            $currentPage = $paginator->currentPage();
+            $totalPages = $paginator->lastPage();
+
+            return response()->json([
+                'dealerVehicles' => $models,
+                'currentPage' => $currentPage,
+                'totalPages' => $totalPages,
             ], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);

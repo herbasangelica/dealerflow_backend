@@ -15,8 +15,21 @@ class Sale extends Model
     {
         return $this->belongsTo(DealerVehicle::class);
     }
+
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function scopeConvertibles($query)
+    {
+        return $query->whereHas('dealerVehicle.manufacturerVehicle.carModel', function ($q) {
+            $q->where('style', 'Convertible');
+        });
+    }
+
+    public function scopeByMonth($query, $month)
+    {
+        return $query->whereMonth('created_at', $month);
     }
 }

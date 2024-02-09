@@ -53,6 +53,8 @@ Route::get("/get-dealers", [DealerController::class, "getDealer"]);
 
 Route::post("/create-manufacturer-vehicle", [ManufacturerVehicleController::class, "createManufacturerVehicle"]);
 Route::get("/get-manufacturer-vehicle", [ManufacturerVehicleController::class, "getManufacturerVehicle"]);
+Route::get("/get-min-max-prices", [ManufacturerVehicleController::class, "getMinMaxPrices"]);
+
 
 
 Route::post("/create-dealer-vehicle", [DealerVehicleController::class, "createDealerVehicle"]);
@@ -60,6 +62,8 @@ Route::get("/get-dealer-vehicle", [DealerVehicleController::class, "getDealerVeh
 Route::get("/dealer-vehicle-by-dealer/{brandId}", [DealerVehicleController::class, "getDealerVehicleByDealer"]);
 Route::get("/dealer-vehicle-by-car-model/{modelId}", [DealerVehicleController::class, "getDealerVehicleByCarModel"]);
 Route::get("/search-vin", [DealerVehicleController::class, "getDealerVehicleVINSearch"]);
+Route::get("/get-dealer-vehicle-by-price", [DealerVehicleController::class, "getDealerVehiclePriceSearch"]);
+
 
 
 Route::post("/create-customer", [CustomerController::class, "createCustomer"]);
@@ -70,3 +74,7 @@ Route::post("/create-sales", [SaleController::class, "createSale"]);
 Route::get("/get-sales", [SaleController::class, "getSale"]);
 Route::get("/get-sales-by-dealer/{dealerId}", [SaleController::class, "getSaleByDealer"]);
 Route::get("/search-sale-vin", [SaleController::class, "searchSaleByVin"]);
+Route::get("get-Top-Brands-By-Dollar-Amount", [SaleController::class, "getTopBrandsByDollarAmount"]);
+Route::get("get-Top-Brands-By-Unit-Sales", [SaleController::class, "getTopBrandsByUnitSales"]);
+Route::get("/get-sales-for-the-past-three-years", [SaleController::class, "getSalesForThePastThreeYears"]);
+Route::get("/best-selling-months-for-convertibles", [SaleController::class, "bestSellingMonthsForConvertibles"]);
